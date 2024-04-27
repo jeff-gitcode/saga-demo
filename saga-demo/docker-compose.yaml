@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  saga-demo:
+    image: saga-demo
+    container_name: saga-demo-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # ports:
+    #   - "8080:8080"
+    # environment:
+    #   - SPRING_PROFILES_ACTIVE=dev
+    #   - SPRING_DATASOURCE_URL=jdbc:postgresql://saga-demo-db:5432/saga-demo
+    #   - SPRING_DATASOURCE_USERNAME=saga-demo
+    #   - SPRING_DATASOURCE_PASSWORD=saga-demo
+    # depends_on:
+    #   - saga-demo-db
+
+  saga-demo-db:
+    image: postgres:latest
+    container_name: saga-demo-db
+    environment:
+      - POSTGRES_DB=saga-demo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+
+  saga-demo-mq:
+    image: rabbitmq:3-management
+    container_name: saga-demo-mq
+    hostname: saga-demo-mq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitmq-data:/var/lib/rabbitmq
+      - ./rabbitmq-log:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    
