@@ -1,12 +1,12 @@
 version: "3.7"
 
 services:
-  saga-demo:
-    image: saga-demo
-    container_name: saga-demo-api
-    build:
-      context: .
-      dockerfile: Dockerfile
+  # saga-demo:
+  #   image: ${DOCKER_REGISTRY-}webapi
+  #   container_name: saga-demo-api
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
     # ports:
     #   - "8080:8080"
     # environment:
@@ -17,27 +17,51 @@ services:
     # depends_on:
     #   - saga-demo-db
 
-  saga-demo-db:
-    image: postgres:latest
-    container_name: saga-demo-db
-    environment:
-      - POSTGRES_DB=saga-demo
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
+  # saga-demo-db:
+  #   image: postgres:latest
+  #   container_name: saga-demo-db
+  #   environment:
+  #     - POSTGRES_DB=saga-demo
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #   ports:
+  #     - "5432:5432"
 
-  saga-demo-mq:
-    image: rabbitmq:3-management
-    container_name: saga-demo-mq
-    hostname: saga-demo-mq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - ./rabbitmq-data:/var/lib/rabbitmq
-      - ./rabbitmq-log:/var/log/rabbitmq
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+  # saga-demo-mq:
+  #   image: rabbitmq:3-management
+  #   container_name: saga-demo-mq
+  #   hostname: saga-demo-mq
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   volumes:
+  #     - ./.containers/queue/data/:/var/lib/rabbitmq
+  #     - ./.containers/queue/log/:/var/log/rabbitmq
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: guest
+  #     RABBITMQ_DEFAULT_PASS: guest
     
+  saga-db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: saga_db
+    # volumes:
+    #     - ./.containers/database:/var/opt/mssql/data
+    ports:
+        - "1433:1433"
+    environment:
+        ACCEPT_EULA: "Y"
+        SA_PASSWORD: "Strong_password_123!"
+
+  saga-mq:
+    image: rabbitmq:3-management
+    container_name: saga_mq
+    hostname: saga-mq
+    # volumes:
+    #     - ./.containers/queue/data/:/var/lib/rabbitmq
+    #     - ./.containers/queue/log/:/var/log/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest    

@@ -1,5 +1,10 @@
 @saga_demo_HostAddress = http://localhost:5250
 
+POST {{saga_demo_HostAddress}}/order/
+Accept: application/json
+
+###
+
 GET {{saga_demo_HostAddress}}/weatherforecast/
 Accept: application/json
 

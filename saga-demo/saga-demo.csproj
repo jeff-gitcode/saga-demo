@@ -15,6 +15,7 @@
     <PackageReference Include="Rebus.RabbitMQ" Version="9.3.0" />
     <PackageReference Include="Rebus.ServiceProvider" Version="10.1.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+	  <PackageReference Include="Rebus.SqlServer" Version="7.3.1" />
   </ItemGroup>
 
 </Project>

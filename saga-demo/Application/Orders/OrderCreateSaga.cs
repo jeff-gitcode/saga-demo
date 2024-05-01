@@ -4,7 +4,7 @@ using Rebus.Sagas;
 
 namespace saga_demo.Application.Orders
 {
-    public class OrderCreateSagaData: ISagaData
+    public class OrderCreateSagaData : ISagaData
     {
         public Guid Id { get; set; }
         public int Revision { get; set; }
@@ -20,6 +20,11 @@ namespace saga_demo.Application.Orders
         IHandleMessages<PaymentRequestSentEvent>
     {
         private readonly IBus _bus;
+
+        public OrderCreateSaga(IBus bus)
+        {
+            _bus = bus;
+        }
 
         protected override void CorrelateMessages(ICorrelationConfig<OrderCreateSagaData> config)
         {

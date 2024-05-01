@@ -16,20 +16,45 @@ builder.Services.AddMediatR(config =>
     //    config.AddBehavior<LoggingBehavior>();
 });
 
-builder.Services.AddRebus(rebus => rebus
-    .Routing(r => r.TypeBased().MapAssemblyOf<Program>("saga-demo-queue"))
-    .Transport(t => t.UseRabbitMq(builder.Configuration.GetConnectionString("MessageBroker"), "saga-demo-queue"))
-    .Sagas(s => s.StoreInPostgres(builder.Configuration.GetConnectionString("Database"), "postgres", "saga_indexes")),
-    onCreated: async bus =>
-    {
-        await bus.Subscribe<OrderCreatedEvent>();
-        await bus.Subscribe<OrderConfirmationEmailSentEvent>();
-        await bus.Subscribe<PaymentRequestSentEvent>();
-    }
-    // .Options(o => o.EnableStateMachineSubscriptions())
+var connectionstring = "Host=localhost;Port=5432;Database=saga-demo;Username=postgres;Password=postgres;";
+// builder.Services.AutoRegisterHandlersFromAssemblyOf<OrderCreateSaga>();
+//builder.Services.AddRebus(rebus => rebus
+//            .Routing(r => r.TypeBased().MapAssemblyOf<Program>("saga-demo-queue"))
+//            .Transport(t =>
+//            t.UseRabbitMq(
+//                builder.Configuration.GetConnectionString("RabbitMq"),
+//                inputQueueName: "saga-demo-queue"))
+//    // .Transport(t => t.UseRabbitMq(builder.Configuration.GetConnectionString("MessageBroker"), "saga-demo-queue"))
+//    .Sagas(s => s.StoreInPostgres(connectionstring, "saga-demo", "saga_indexes", true, null, schemaName: "public")),
+//    onCreated: async bus =>
+//    {
+//        await bus.Subscribe<OrderCreatedEvent>();
+//        await bus.Subscribe<OrderConfirmationEmailSentEvent>();
+//        await bus.Subscribe<PaymentRequestSentEvent>();
+//    }
+//    // .Options(o => o.EnableStateMachineSubscriptions())
+//);
+builder.Services.AddRebus(
+    rebus => rebus
+        .Routing(r =>
+            r.TypeBased().MapAssemblyOf<OrderCreateSagaData>("saga-queue"))
+        .Transport(t =>
+            t.UseRabbitMq(
+                builder.Configuration.GetConnectionString("RabbitMq"),
+                inputQueueName: "saga-queue"))
+        .Sagas(s =>
+            s.StoreInSqlServer(
+                builder.Configuration.GetConnectionString("SqlServer"),
+                dataTableName: "Sagas",
+                indexTableName: "SagaIndexes"))
+        .Timeouts(t =>
+            t.StoreInSqlServer(
+                builder.Configuration.GetConnectionString("SqlServer"),
+                tableName: "Timeouts"))
 );
 
-builder.Services.AutoRegisterHandlersFromAssemblyOf<Program>();
+// builder.Services.AutoRegisterHandlersFromAssemblyOf<Program>();
+builder.Services.AutoRegisterHandlersFromAssemblyOf<OrderCreateSagaData>();
 
 var app = builder.Build();
 
@@ -66,8 +91,12 @@ app.MapPost("/order", async (IMediator bus) =>
 {
     await bus.Send(new OrderCreateCommand(Guid.NewGuid()));
 
+    // await bus.Send(new OrderCreatedEvent(Guid.NewGuid()));
+
     return Results.Accepted();
 });
+
+app.UseHttpsRedirection();
 
 app.Run();
 
