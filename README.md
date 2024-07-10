@@ -11,6 +11,8 @@
 
 ```dotnetcli
 
+$dotnet new sln --name saga
+
 $ dotnet new console -n SagaDemo
 
 $ cd SagaDemo
@@ -35,4 +37,18 @@ $ docker-compose up -d
 http://localhost:15672
 
 
+# saga demo2
+$ dotnet new webapi -o saga-demo2
+
+$ dotnet build
+$ dotnet run --project ./saga-demo2
+
+$ dotnet add ./saga-demo2 package MassTransit
+$ dotnet add ./saga-demo2 package MediatR
+$ dotnet add ./saga-demo2 package MassTransit.Extensions.DependencyInjection
+$ dotnet add ./saga-demo2 package MassTransit.RabbitMQ
+$ dotnet add ./saga-demo2 package EntityFramework
+$ dotnet add ./saga-demo2 package MassTransit.EntityFrameworkCore
+$ dotnet add ./saga-demo2 package Npgsql.EntityFrameworkCore.PostgreSQL
+$ dotnet sln add saga-demo2
 ```
