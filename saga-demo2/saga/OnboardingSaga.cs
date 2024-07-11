@@ -11,9 +11,9 @@ namespace saga_demo2.saga
         public State State3 { get; private set; }
 
         // Events
-        public Event<Message1Sent> Event1 { get; private set; }
-        public Event<Message2Sent> Event2 { get; private set; }
-        public Event<Message3Sent> Event3 { get; private set; }
+        public Event<Message1Sent> Event1 { get; set; }
+        public Event<Message2Sent> Event2 { get; set; }
+        public Event<Message3Sent> Event3 { get; set; }
 
         public OnboardingSaga()
         {
@@ -36,14 +36,14 @@ namespace saga_demo2.saga
 
             During(State1,
                 When(Event2)
-                    .Then(context => context.Saga.IsStep1Done = true)
+                    .Then(context => context.Saga.WelcomeEmailSent = true)
                     .TransitionTo(State2)
                     .Publish(context => new Message2(context.Message.SubscriberId, context.Message.Email))
             );
 
             During(State2,
                 When(Event3)
-                    .Then(context => context.Saga.IsStep2Done = true)
+                    .Then(context => context.Saga.FollowUpEmailSent = true)
                     .TransitionTo(State3)
                     .Publish(context => new Message3(context.Message.SubscriberId, context.Message.Email))
                     .Finalize()

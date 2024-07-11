@@ -15,11 +15,11 @@ namespace saga_demo2.saga
         public Guid SubscriberId { get; set; }
         public string Email { get; set; }
 
-        public bool IsStep1Done { get; set; }
+        public bool WelcomeEmailSent { get; set; }
 
-        public bool IsStep2Done { get; set; }
+        public bool FollowUpEmailSent { get; set; }
 
-        public bool IsStep3Done { get; set; }
+        public bool OnboardingCompleted { get; set; }
         public DateTime SubscribedAt { get; set; }
  
  
