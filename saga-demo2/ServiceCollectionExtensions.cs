@@ -37,7 +37,7 @@ public static class ServiceCollectionExtensions
 
             o.AddConsumers(typeof(Program).Assembly);
 
-            o.AddSagaStateMachine<NewsLetterOnboardingSaga, NewsLetterOnboardingSagaData>()
+            o.AddSagaStateMachine<OnboardingSaga, OnboardingSagaData>()
                 .EntityFrameworkRepository(r=>{
                     r.ExistingDbContext<AppDbContext>();
 

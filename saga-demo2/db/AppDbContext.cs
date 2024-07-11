@@ -9,12 +9,12 @@ public class AppDbContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<NewsLetterOnboardingSagaData>().HasKey(e => e.CorrelationId);
+        modelBuilder.Entity<OnboardingSagaData>().HasKey(e => e.CorrelationId);
     }
 
     public DbSet<Subscriber> Subscribers { get; set; }
 
-    public DbSet<NewsLetterOnboardingSagaData> SagaData { get; set; } 
+    public DbSet<OnboardingSagaData> SagaData { get; set; } 
 }
 
 public class Subscriber

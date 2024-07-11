@@ -3,7 +3,7 @@ using saga_demo2.Messages;
 
 namespace saga_demo2.saga
 {
-    public class NewsLetterOnboardingSaga: MassTransitStateMachine<NewsLetterOnboardingSagaData>
+    public class OnboardingSaga: MassTransitStateMachine<OnboardingSagaData>
     {
         // States
         public State State1 { get; private set; }
@@ -11,11 +11,11 @@ namespace saga_demo2.saga
         public State State3 { get; private set; }
 
         // Events
-        public Event<Message1Sent> Event1 { get; set; }
-        public Event<Message2Sent> Event2 { get; set; }
-        public Event<Message3Sent> Event3 { get; set; }
+        public Event<Message1Sent> Event1 { get; private set; }
+        public Event<Message2Sent> Event2 { get; private set; }
+        public Event<Message3Sent> Event3 { get; private set; }
 
-        public NewsLetterOnboardingSaga()
+        public OnboardingSaga()
         {
             InstanceState(x => x.CurrentState);
 
@@ -36,14 +36,14 @@ namespace saga_demo2.saga
 
             During(State1,
                 When(Event2)
-                    .Then(context => context.Saga.WelcomeEmailSent = true)
+                    .Then(context => context.Saga.IsStep1Done = true)
                     .TransitionTo(State2)
                     .Publish(context => new Message2(context.Message.SubscriberId, context.Message.Email))
             );
 
             During(State2,
                 When(Event3)
-                    .Then(context => context.Saga.FollowUpEmailSent = true)
+                    .Then(context => context.Saga.IsStep2Done = true)
                     .TransitionTo(State3)
                     .Publish(context => new Message3(context.Message.SubscriberId, context.Message.Email))
                     .Finalize()
