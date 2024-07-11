@@ -4,3 +4,9 @@ GET {{saga_demo2_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+POST {{saga_demo2_HostAddress}}/sagatest/
+Accept: */*
+Content-Type: application/json
+
+"string"
+###

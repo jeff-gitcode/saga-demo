@@ -37,9 +37,9 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapPost("/newsletter", async ([FromBody] string email, IBus bus) => {
+app.MapPost("/sagatest", async ([FromBody] string email, IBus bus) => {
     
-    await bus.Publish(new SubscribeToNewsletter(email));
+    await bus.Publish(new Message0(email));
     return Results.Accepted();
 });
 

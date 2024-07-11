@@ -1,28 +1,28 @@
 namespace saga_demo2.Messages;
 
-public record SendWelcomeEmail(Guid SubscriberId, string Email);
+public record Message1(Guid SubscriberId, string Email);
 
-public record SendFollowUpEmail(Guid SubscriberId, string Email);
+public record Message2(Guid SubscriberId, string Email);
 
-public record OnboardingCompleted(Guid SubscriberId, string Email);
+public record Message3(Guid SubscriberId, string Email);
 
-public record SubscribeToNewsletter(string Email);
+public record Message0(string Email);
 
-public record SubscriberCreated
+public record Message1Sent
 {
     public Guid SubscriberId { get; init; }
 
     public string Email { get; init; }
 }
  
-public record WelcomeEmailSent
+public record Message2Sent
 {
     public Guid SubscriberId { get; init; }
 
     public string Email { get; init; }
 }
 
-public record FollowUpEmailSent
+public record Message3Sent
 {
     public Guid SubscriberId { get; init; }
 

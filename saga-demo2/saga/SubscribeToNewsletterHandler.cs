@@ -1,9 +1,9 @@
 using MassTransit;
 using saga_demo2.Messages;
 
-public class SubscribeToNewsletterHandler(AppDbContext appDbContext) : IConsumer<SubscribeToNewsletter>
+public class Message0Handler(AppDbContext appDbContext) : IConsumer<Message0>
 {
-    public async Task Consume(ConsumeContext<SubscribeToNewsletter> context)
+    public async Task Consume(ConsumeContext<Message0> context)
     {
         var subscriber = appDbContext.Subscribers.Add(new Subscriber
         {
@@ -14,7 +14,7 @@ public class SubscribeToNewsletterHandler(AppDbContext appDbContext) : IConsumer
 
         await appDbContext.SaveChangesAsync();
 
-        await context.Publish(new SubscriberCreated
+        await context.Publish(new Message1Sent
         {
             SubscriberId = subscriber.Entity.Id,
             Email = subscriber.Entity.Email
@@ -22,13 +22,13 @@ public class SubscribeToNewsletterHandler(AppDbContext appDbContext) : IConsumer
     }
 }
 
-public class SendWelcomeEmailHandler : IConsumer<SendWelcomeEmail>
+public class Message1Handler : IConsumer<Message1>
 {
-    public async Task Consume(ConsumeContext<SendWelcomeEmail> context)
+    public async Task Consume(ConsumeContext<Message1> context)
     {
         await Console.Out.WriteLineAsync($"Sending welcome email to {context.Message.Email}");
 
-        await context.Publish(new WelcomeEmailSent
+        await context.Publish(new Message2Sent
         {
             SubscriberId = context.Message.SubscriberId,
             Email = context.Message.Email
@@ -36,13 +36,13 @@ public class SendWelcomeEmailHandler : IConsumer<SendWelcomeEmail>
     }
 }
 
-public class SendFollowUpEmailHandler : IConsumer<SendFollowUpEmail>
+public class Message2Handler : IConsumer<Message2>
 {
-    public async Task Consume(ConsumeContext<SendFollowUpEmail> context)
+    public async Task Consume(ConsumeContext<Message2> context)
     {
         await Console.Out.WriteLineAsync($"Sending follow up email to {context.Message.Email}");
 
-        await context.Publish(new FollowUpEmailSent
+        await context.Publish(new Message3Sent
         {
             SubscriberId = context.Message.SubscriberId,
             Email = context.Message.Email
@@ -50,9 +50,9 @@ public class SendFollowUpEmailHandler : IConsumer<SendFollowUpEmail>
     }
 }
 
-public class OnboardingCompletedHandler : IConsumer<OnboardingCompleted>
+public class Message3Handler : IConsumer<Message3>
 {
-    public Task Consume(ConsumeContext<OnboardingCompleted> context)
+    public Task Consume(ConsumeContext<Message3> context)
     {
         Console.Out.WriteLine($"Onboarding completed for {context.Message.Email}");
 
