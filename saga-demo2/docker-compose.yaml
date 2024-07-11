@@ -1,0 +1,79 @@
+version: "3.7"
+
+services:
+  # saga-demo:
+  #   image: ${DOCKER_REGISTRY-}webapi
+  #   container_name: saga-demo-api
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+    # ports:
+    #   - "8080:8080"
+    # environment:
+    #   - SPRING_PROFILES_ACTIVE=dev
+    #   - SPRING_DATASOURCE_URL=jdbc:postgresql://saga-demo-db:5432/saga-demo
+    #   - SPRING_DATASOURCE_USERNAME=saga-demo
+    #   - SPRING_DATASOURCE_PASSWORD=saga-demo
+    # depends_on:
+    #   - saga-demo-db
+
+  saga-demo-db:
+    image: postgres:latest
+    container_name: saga-demo2
+    environment:
+      - POSTGRES_DB=saga-demo2
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+      image: dpage/pgadmin4
+      container_name: pgadmin4_container
+      restart: always
+      ports:
+        - "8888:80"
+      environment:
+        PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+        PGADMIN_DEFAULT_PASSWORD: postgres
+      # volumes:
+      #   - pgadmin-data:/var/lib/pgadmin
+
+  # saga-demo-mq:
+  #   image: rabbitmq:3-management
+  #   container_name: saga-demo-mq
+  #   hostname: saga-demo-mq
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   volumes:
+  #     - ./.containers/queue/data/:/var/lib/rabbitmq
+  #     - ./.containers/queue/log/:/var/log/rabbitmq
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: guest
+  #     RABBITMQ_DEFAULT_PASS: guest
+    
+  saga-db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: saga_db
+    # volumes:
+    #     - ./.containers/database:/var/opt/mssql/data
+    ports:
+        - "1433:1433"
+    environment:
+        ACCEPT_EULA: "Y"
+        SA_PASSWORD: "Strong_password_123!"
+
+  saga-mq:
+    image: rabbitmq:3-management
+    container_name: saga_mq
+    hostname: saga-mq
+    # volumes:
+    #     - ./.containers/queue/data/:/var/lib/rabbitmq
+    #     - ./.containers/queue/log/:/var/log/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest    

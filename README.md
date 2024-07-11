@@ -32,7 +32,7 @@ $ dotnet add package Rebus.PostgreSql
 $ dotnet build
 
 $ docker-compose up -d
-
+$ docker-compose down
 # MQ
 http://localhost:15672
 
@@ -49,6 +49,12 @@ $ dotnet add ./saga-demo2 package MassTransit.Extensions.DependencyInjection
 $ dotnet add ./saga-demo2 package MassTransit.RabbitMQ
 $ dotnet add ./saga-demo2 package EntityFramework
 $ dotnet add ./saga-demo2 package MassTransit.EntityFrameworkCore
+$ dotnet add ./saga-demo2 package Microsoft.EntityFrameworkCore.Tools
 $ dotnet add ./saga-demo2 package Npgsql.EntityFrameworkCore.PostgreSQL
+$ dotnet add ./saga-demo2 package Microsoft.EntityFrameworkCore.Design
 $ dotnet sln add saga-demo2
+
+# TO CREATE TABLE IN POSTGRES
+$ dotnet ef migrations add InitialMigration
+$ dotnet ef database update
 ```

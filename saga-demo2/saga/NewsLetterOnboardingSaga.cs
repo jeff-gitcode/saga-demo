@@ -5,10 +5,12 @@ namespace saga_demo2.saga
 {
     public class NewsLetterOnboardingSaga: MassTransitStateMachine<NewsLetterOnboardingSagaData>
     {
+        // States
         public State Welcoming { get; private set; }
         public State FollowingUp { get; private set; }
         public State Onboarding { get; private set; }
 
+        // Events
         public Event<SubscriberCreated> SubscriberCreated { get; set; }
         public Event<WelcomeEmailSent> WelcomeEmailSent { get; set; }
         public Event<FollowUpEmailSent> FollowUpEmailSent { get; set; }

@@ -52,15 +52,10 @@ public class SendFollowUpEmailHandler : IConsumer<SendFollowUpEmail>
 
 public class OnboardingCompletedHandler : IConsumer<OnboardingCompleted>
 {
-    public async Task<Task> Consume(ConsumeContext<OnboardingCompleted> context)
+    public Task Consume(ConsumeContext<OnboardingCompleted> context)
     {
-        await Console.Out.WriteLineAsync($"Onboarding completed for {context.Message.Email}");
+        Console.Out.WriteLine($"Onboarding completed for {context.Message.Email}");
 
         return Task.CompletedTask;
-    }
-
-    Task IConsumer<OnboardingCompleted>.Consume(ConsumeContext<OnboardingCompleted> context)
-    {
-        throw new NotImplementedException();
     }
 }

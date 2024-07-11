@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using saga_demo2.Messages;
 using saga_demo2.ServiceCollectionExtensions;
 
@@ -23,6 +24,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
 }
 
 app.UseHttpsRedirection();
@@ -32,9 +37,9 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/newsletter", async ([FromBody] string email, IBus bus) => {
+app.MapPost("/newsletter", async ([FromBody] string email, IBus bus) => {
     
-    await bus.Publish<SubscribeToNewsletter>(new { Email = email });
+    await bus.Publish(new SubscribeToNewsletter(email));
     return Results.Accepted();
 });
 

@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddDb(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<AppDbContext>(options =>
+        services.AddDbContextPool<AppDbContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("Postgres")!);
         });
@@ -50,6 +50,8 @@ public static class ServiceCollectionExtensions
                     hst.Username("guest");
                     hst.Password("guest");
                 });
+
+                cfg.UseInMemoryOutbox(context);
 
                 cfg.ConfigureEndpoints(context);
             });
